@@ -1,0 +1,4 @@
+domestic-quote-9.3.1.3
+domestic-trade-9.0.3.15
+global-quote-9.3.1.1
+global-trade-9.2.9.3
