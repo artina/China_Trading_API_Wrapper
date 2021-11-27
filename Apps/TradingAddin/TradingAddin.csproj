@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBA8B029-94F2-4FEF-A755-ADE7B3CD7797}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TradingAddin</RootNamespace>
+    <AssemblyName>TradingAddin</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)_bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)_bin\_obj\$(Configuration)\$(ProjectName)\</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)_bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)_bin\_obj\$(Configuration)\$(ProjectName)\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExcelDna.Integration, Version=1.1.0.0, Culture=neutral, PublicKeyToken=f225e9659857edbe, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ExcelDna.Integration.1.1.0\lib\ExcelDna.Integration.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common.cs" />
+    <Compile Include="CtpFuture.cs" />
+    <Compile Include="CtpStock.cs" />
+    <Compile Include="ESunnyDomesticQuote.cs" />
+    <Compile Include="ESunnyDomesticTrade.cs" />
+    <Compile Include="ESunnyGlobalQuote.cs" />
+    <Compile Include="ESunnyGlobalTrade.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\ExcelDna.Build.props" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="TradingAddin-AddIn.dna" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\API\CTP\Future\CtpFutureWrapper.csproj">
+      <Project>{ac80217c-e7af-4551-8625-7fe9e2b89fd7}</Project>
+      <Name>CtpFutureWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\API\CTP\Stock\CtpStockWrapper.csproj">
+      <Project>{339412a4-14fc-4fc8-96c6-4c8e0312c6de}</Project>
+      <Name>CtpStockWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\API\ESunny\DomesticQuote\ESunnyDomesticQuoteWrapper.csproj">
+      <Project>{fc39322e-a304-4235-afce-59305ce2683a}</Project>
+      <Name>ESunnyDomesticQuoteWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\API\ESunny\DomesticTrade\ESunnyDomesticTradeWrapper.csproj">
+      <Project>{5af79845-2174-4c7b-86fd-bc819cc0875d}</Project>
+      <Name>ESunnyDomesticTradeWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\API\ESunny\GlobalQuote\ESunnyGlobalQuoteWrapper.csproj">
+      <Project>{b80087c8-584f-4e4f-bb16-8806ee220661}</Project>
+      <Name>ESunnyGlobalQuoteWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\API\ESunny\GlobalTrade\ESunnyGlobalTradeWrapper.csproj">
+      <Project>{0718c33b-f474-415a-bfcf-bbf00fe27696}</Project>
+      <Name>ESunnyGlobalTradeWrapper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>powershell -ExecutionPolicy ByPass -File $(ProjectDir)Deployer.ps1 $(Configuration)</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\..\packages\ExcelDna.AddIn.1.1.1\build\ExcelDna.AddIn.targets" Condition="Exists('..\..\packages\ExcelDna.AddIn.1.1.1\build\ExcelDna.AddIn.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\ExcelDna.AddIn.1.1.1\build\ExcelDna.AddIn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\ExcelDna.AddIn.1.1.1\build\ExcelDna.AddIn.targets'))" />
+  </Target>
+</Project>
